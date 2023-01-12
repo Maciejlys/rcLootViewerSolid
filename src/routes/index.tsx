@@ -1,4 +1,4 @@
-import UploadPage from '~/components/pages/UploadPage'
+import UploadPage from "~/components/pages/UploadPage";
 
 export default function Home() {
   return (
@@ -7,5 +7,5 @@ export default function Home() {
         <UploadPage />
       </div>
     </div>
-  )
+  );
 }
