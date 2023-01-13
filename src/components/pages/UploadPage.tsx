@@ -17,7 +17,7 @@ const steps = ["Upload", "Votes"];
 const buttonTooltips = ["Upload file first!", "Enter values first!"];
 
 const UploadPage: Component<{}> = () => {
-  const [step, setstep] = createSignal(1);
+  const [step, setstep] = createSignal(0);
   const [disableButton, setdisableButton] = createSignal(true);
   const { fileName } = Loot;
   const navigate = useNavigate();

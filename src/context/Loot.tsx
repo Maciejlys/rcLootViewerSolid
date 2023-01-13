@@ -36,10 +36,10 @@ function createLoot() {
   );
 
   const getDifferentVotes = () => {
-    const votes: string[] = [];
+    const votes: string[][] = [];
     players().map((player) => {
-      if (!votes.includes(player.vote)) {
-        votes.push(player.vote);
+      if (!votes.map((vote) => vote[0]).includes(player.vote)) {
+        votes.push([player.vote, player.item]);
       }
     });
     return votes;
@@ -77,7 +77,7 @@ function createLoot() {
     setSeparatedItems(parsedData);
   };
 
-  return { setRawLoot, setfileName, fileName };
+  return { setRawLoot, setfileName, fileName, getDifferentVotes };
 }
 
 export default createRoot(createLoot);
