@@ -12,6 +12,7 @@ import FileUploader from "../molecules/FileUploader";
 import Stepper from "../molecules/Stepper";
 import Tooltip from "../atmos/Tooltip";
 import Votes from "../organizms/Votes";
+import Vote from "~/context/Vote";
 
 const steps = ["Upload", "Votes"];
 const buttonTooltips = ["Upload file first!", "Enter values first!"];
@@ -20,18 +21,20 @@ const UploadPage: Component<{}> = () => {
   const [step, setstep] = createSignal(0);
   const [disableButton, setdisableButton] = createSignal(true);
   const { fileName } = Loot;
+  const { votesChanged } = Vote;
   const navigate = useNavigate();
-  createEffect(
-    on(step, (step) => {
-      if (step > 1) {
-        throw navigate("/data");
-      }
 
-      setdisableButton(true);
-    })
-  );
+  const handleStep = () => {
+    setstep(step() + 1);
+    if (step() > 1) {
+      return navigate("/data");
+    }
+    setdisableButton(true);
+  };
+
   createEffect(() => {
     fileName() && setdisableButton(false);
+    votesChanged() && setdisableButton(false);
   });
   return (
     <div class="flex flex-col items-center justify-center min-h-screen gap-32">
@@ -51,7 +54,7 @@ const UploadPage: Component<{}> = () => {
       <footer class="flex w-1/2 items-center justify-center">
         <Tooltip msg={buttonTooltips[step()]} shouldShow={disableButton()}>
           <button
-            onClick={() => setstep(step() + 1)}
+            onClick={handleStep}
             type="button"
             disabled={disableButton()}
             class="w-full text-white focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600"

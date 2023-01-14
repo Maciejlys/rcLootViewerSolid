@@ -1,4 +1,4 @@
-import { Component, createSignal, Show } from "solid-js";
+import { Component, createSignal, Setter, Show } from "solid-js";
 
 interface Styles {
   type: "success" | "error";
@@ -23,11 +23,15 @@ const error: Styles = {
   paragraphStyles: "text-red-600 dark:text-red-500",
 };
 
-const TextInput: Component<{ placeholder: string; label: string }> = (
-  props
-) => {
+const TextInput: Component<{
+  placeholder: string;
+  label: string;
+  setter: Setter<string>;
+  value: string;
+}> = (props) => {
   const [hasErrors, sethasErrors] = createSignal(false);
   const [isCorrect, setisCorrect] = createSignal(false);
+
   return (
     <div class="mb-6">
       <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -37,6 +41,10 @@ const TextInput: Component<{ placeholder: string; label: string }> = (
         type="text"
         class="bg-gray-50 border border-gray-300 outline-none text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder={props.placeholder}
+        onInput={(e) => {
+          props.setter(e.currentTarget.value);
+        }}
+        value={props.value}
         required
       />
       <Show when={isCorrect() || hasErrors()}>

@@ -14,10 +14,6 @@ const Tooltip: ParentComponent<{ msg: string; shouldShow: boolean }> = (
 ) => {
   const [show, setshow] = createSignal(false);
 
-  createEffect(() => {
-    console.log();
-  });
-
   return (
     <Show when={props.shouldShow} fallback={props.children}>
       <div
