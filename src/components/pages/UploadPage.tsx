@@ -9,50 +9,37 @@ import {
 import { useNavigate } from "solid-start";
 import Loot from "~/context/Loot";
 import FileUploader from "../molecules/FileUploader";
-import Stepper from "../molecules/Stepper";
 import Tooltip from "../atmos/Tooltip";
-import Votes from "../organizms/Votes";
-import Vote from "~/context/Vote";
+import Paragraph from "../atmos/Paragraph";
 
 const steps = ["Upload", "Votes"];
-const buttonTooltips = ["Upload file first!", "Enter values first!"];
+const buttonTooltips = ["", "Enter values first!"];
 
 const UploadPage: Component<{}> = () => {
-  const [step, setstep] = createSignal(0);
   const [disableButton, setdisableButton] = createSignal(true);
   const { fileName } = Loot;
-  const { votesChanged } = Vote;
   const navigate = useNavigate();
-
-  const handleStep = () => {
-    setstep(step() + 1);
-    if (step() > 1) {
-      return navigate("/data");
-    }
-    setdisableButton(true);
-  };
 
   createEffect(() => {
     fileName() && setdisableButton(false);
-    votesChanged() && setdisableButton(false);
   });
+
+  const handleStep = () => {
+    fileName() && navigate("/loot");
+  };
+
   return (
     <div class="flex flex-col items-center justify-center min-h-screen gap-32">
       <header class="flex w-1/2 items-center justify-center">
-        <Stepper currentStep={step()} steps={steps} />
+        <Paragraph>
+          Upload a .csv file that was exported from rcLootCouncil
+        </Paragraph>
       </header>
       <div class="flex w-1/2 h-96 items-center justify-center">
-        <Switch>
-          <Match when={step() === 0}>
-            <FileUploader />
-          </Match>
-          <Match when={step() === 1}>
-            <Votes />
-          </Match>
-        </Switch>
+        <FileUploader />
       </div>
       <footer class="flex w-1/2 items-center justify-center">
-        <Tooltip msg={buttonTooltips[step()]} shouldShow={disableButton()}>
+        <Tooltip msg={"Upload file first!"} shouldShow={disableButton()}>
           <button
             onClick={handleStep}
             type="button"

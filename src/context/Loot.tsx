@@ -13,7 +13,7 @@ const emptyLoot: PlayerLoot = {
 };
 
 function createLoot() {
-  const [fileName, setfileName] = createSignal("");
+  const [fileName, setfileName] = createSignal("XD"); //TODO remove filename
   const [rawLoot, setRawLoot] = createSignal<string[]>([]);
   const [players, setPlayers] = createSignal<
     { player: string; vote: string; item: string }[]
