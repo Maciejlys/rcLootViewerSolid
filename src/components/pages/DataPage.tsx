@@ -1,5 +1,5 @@
 import { Component, createSignal, Match, Switch } from "solid-js";
-import LootTable from "../organizms/LootTable";
+import LootTable from "../molecules/LootTable";
 
 const activeClass = "text-gray-900 dark:bg-gray-700 dark:text-white";
 const notActiveClass =

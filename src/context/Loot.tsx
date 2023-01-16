@@ -1,9 +1,10 @@
 import { createSignal, createRoot, createEffect, on } from "solid-js";
-import { PlayerLoot, PlayersLoot } from "~/models/loot.model";
+import { PlayerLoot } from "~/models/loot.model";
 import { VoteType } from "~/models/voteType";
 import Vote from "./Vote";
 
 const emptyLoot: PlayerLoot = {
+  player: "",
   bises: [],
   ups: [],
   offSpec: [],
@@ -13,12 +14,12 @@ const emptyLoot: PlayerLoot = {
 };
 
 function createLoot() {
-  const [fileName, setfileName] = createSignal("XD"); //TODO remove filename
+  const [fileName, setfileName] = createSignal("");
   const [rawLoot, setRawLoot] = createSignal<string[]>([]);
   const [players, setPlayers] = createSignal<
     { player: string; vote: string; item: string }[]
   >([]);
-  const [separatedItems, setSeparatedItems] = createSignal<PlayersLoot>({});
+  const [separatedItems, setSeparatedItems] = createSignal<PlayerLoot[]>([]);
   const { vote } = Vote;
 
   createEffect(
@@ -46,38 +47,54 @@ function createLoot() {
   };
 
   const separateItems = () => {
-    const parsedData: PlayersLoot = {};
-    for (let player of players()) {
-      parsedData[player.player] ??= { ...emptyLoot };
-      parsedData[player.player] = {
-        ...parsedData[player.player],
-        allItems: [...parsedData[player.player].allItems, player.item],
-      };
+    const parsedData: PlayerLoot[] = [];
+    players().forEach((player) => {
+      const playerLoot = parsedData.find((p) => p.player === player.player);
+      if (!playerLoot) {
+        parsedData.push({
+          ...emptyLoot,
+          player: player.player,
+          allItems: [player.item],
+        });
+      }
+
       switch (player.vote) {
         case vote().Bis:
-          parsedData[player.player] = {
-            ...parsedData[player.player],
-            bises: [...parsedData[player.player].bises, player.item],
-          };
+          if (playerLoot) {
+            parsedData[parsedData.indexOf(playerLoot)] = {
+              ...playerLoot,
+              bises: [...playerLoot.bises, player.item],
+            };
+          }
           break;
         case vote().Up:
-          parsedData[player.player] = {
-            ...parsedData[player.player],
-            ups: [...parsedData[player.player].ups, player.item],
-          };
+          if (playerLoot) {
+            parsedData[parsedData.indexOf(playerLoot)] = {
+              ...playerLoot,
+              ups: [...playerLoot.bises, player.item],
+            };
+          }
           break;
         case vote().OffSpec:
-          parsedData[player.player] = {
-            ...parsedData[player.player],
-            offSpec: [...parsedData[player.player].offSpec, player.item],
-          };
+          if (playerLoot) {
+            parsedData[parsedData.indexOf(playerLoot)] = {
+              ...playerLoot,
+              offSpec: [...playerLoot.bises, player.item],
+            };
+          }
           break;
       }
-    }
+    });
     setSeparatedItems(parsedData);
   };
 
-  return { setRawLoot, setfileName, fileName, getDifferentVotes };
+  return {
+    setRawLoot,
+    setfileName,
+    fileName,
+    getDifferentVotes,
+    separatedItems,
+  };
 }
 
 export default createRoot(createLoot);
