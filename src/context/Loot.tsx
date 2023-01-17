@@ -1,6 +1,6 @@
 import { createSignal, createRoot, createEffect, on } from "solid-js";
 import { PlayerLoot } from "~/models/loot.model";
-import { VoteType } from "~/models/voteType";
+import LootScores from "../context/LootScores";
 import Vote from "./Vote";
 
 const emptyLoot: PlayerLoot = {
@@ -21,6 +21,7 @@ function createLoot() {
   >([]);
   const [separatedItems, setSeparatedItems] = createSignal<PlayerLoot[]>([]);
   const { vote } = Vote;
+  const { itemWeight, contestedItems, contestedWeight } = LootScores;
 
   createEffect(
     on(rawLoot, (rawLoot) => {
@@ -33,8 +34,24 @@ function createLoot() {
       });
       setPlayers(players);
       separateItems();
+      calculateScores();
+      console.log(separatedItems());
     })
   );
+
+  const calculateScores = () => {
+    for (let loot of separatedItems()) {
+      loot.score =
+        loot.bises.length * +itemWeight().Bis +
+        loot.ups.length * +itemWeight().Up +
+        loot.offSpec.length * +itemWeight().OffSpec;
+      let contestedCount =
+        contestedItems().filter((value) => loot.allItems.includes(value))
+          .length || 0;
+
+      loot.adjusted = loot.score + contestedWeight() * contestedCount;
+    }
+  };
 
   const getDifferentVotes = () => {
     const votes: string[][] = [];
@@ -46,6 +63,17 @@ function createLoot() {
     return votes;
   };
 
+  const sortItems = (sortBy: keyof PlayerLoot) =>
+    separatedItems().sort((a, b) => {
+      if (a[sortBy] > b[sortBy]) {
+        return -1;
+      }
+      if (a[sortBy] < b[sortBy]) {
+        return 1;
+      }
+      return 0;
+    });
+
   const separateItems = () => {
     const parsedData: PlayerLoot[] = [];
     players().forEach((player) => {
@@ -54,8 +82,9 @@ function createLoot() {
         parsedData.push({
           ...emptyLoot,
           player: player.player,
-          allItems: [player.item],
         });
+      } else {
+        playerLoot.allItems = [...playerLoot.allItems, player.item];
       }
 
       switch (player.vote) {
@@ -94,6 +123,7 @@ function createLoot() {
     fileName,
     getDifferentVotes,
     separatedItems,
+    sortItems,
   };
 }
 
