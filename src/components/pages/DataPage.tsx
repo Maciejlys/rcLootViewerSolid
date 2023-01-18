@@ -19,7 +19,7 @@ const DataPage: Component<{}> = (props) => {
           <li class="w-full">
             <a
               onClick={() => setcurrentTab(Tabs.Data)}
-              class="inline-block cursor-pointer w-full p-4 bg-gray-100 rounded-l-lg focus:ring-4 focus:ring-blue-300 active focus:outline-none"
+              class="inline-block cursor-pointer w-full p-4 bg-white rounded-l-lg dark:hover:text-white"
               classList={{
                 [activeClass]: currentTab() === Tabs.Data,
                 [notActiveClass]: currentTab() !== Tabs.Data,
