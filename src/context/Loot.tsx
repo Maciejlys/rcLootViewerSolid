@@ -19,7 +19,7 @@ function createLoot() {
   const [players, setPlayers] = createSignal<
     { player: string; vote: string; item: string }[]
   >([]);
-  const [separatedItems, setSeparatedItems] = createSignal<PlayerLoot[]>([]);
+  const [playersLoot, setplayersLoot] = createSignal<PlayerLoot[]>([]);
   const { vote } = Vote;
   const { itemWeight, contestedItems, contestedWeight } = LootScores;
 
@@ -35,12 +35,11 @@ function createLoot() {
       setPlayers(players);
       separateItems();
       calculateScores();
-      console.log(separatedItems());
     })
   );
 
   const calculateScores = () => {
-    for (let loot of separatedItems()) {
+    for (let loot of playersLoot()) {
       loot.score =
         loot.bises.length * +itemWeight().Bis +
         loot.ups.length * +itemWeight().Up +
@@ -63,16 +62,29 @@ function createLoot() {
     return votes;
   };
 
-  const sortItems = (sortBy: keyof PlayerLoot) =>
-    separatedItems().sort((a, b) => {
-      if (a[sortBy] > b[sortBy]) {
+  const sortItems = (sortBy: keyof PlayerLoot) => {
+    const sorted = playersLoot().sort((a, b) => {
+      let aSort, bSort;
+      if (sortBy === "bises" || sortBy === "ups" || sortBy === "offSpec") {
+        aSort = a[sortBy].length;
+        bSort = b[sortBy].length;
+      } else if (sortBy === "player") {
+        aSort = b[sortBy].toLowerCase();
+        bSort = a[sortBy].toLowerCase();
+      } else {
+        aSort = a[sortBy];
+        bSort = b[sortBy];
+      }
+      if (aSort > bSort) {
         return -1;
       }
-      if (a[sortBy] < b[sortBy]) {
+      if (aSort < bSort) {
         return 1;
       }
       return 0;
     });
+    setplayersLoot([...sorted]);
+  };
 
   const separateItems = () => {
     const parsedData: PlayerLoot[] = [];
@@ -114,7 +126,7 @@ function createLoot() {
           break;
       }
     });
-    setSeparatedItems(parsedData);
+    setplayersLoot(parsedData);
   };
 
   return {
@@ -122,8 +134,8 @@ function createLoot() {
     setfileName,
     fileName,
     getDifferentVotes,
-    separatedItems,
     sortItems,
+    playersLoot,
   };
 }
 
