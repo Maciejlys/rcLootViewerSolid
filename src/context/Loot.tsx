@@ -38,6 +38,9 @@ function createLoot() {
     })
   );
 
+  const getPlayerLoot = (player: string) =>
+    playersLoot().find((p) => p.player === player);
+
   const calculateScores = () => {
     for (let loot of playersLoot()) {
       loot.score =
@@ -112,7 +115,7 @@ function createLoot() {
           if (playerLoot) {
             parsedData[parsedData.indexOf(playerLoot)] = {
               ...playerLoot,
-              ups: [...playerLoot.bises, player.item],
+              ups: [...playerLoot.ups, player.item],
             };
           }
           break;
@@ -120,7 +123,7 @@ function createLoot() {
           if (playerLoot) {
             parsedData[parsedData.indexOf(playerLoot)] = {
               ...playerLoot,
-              offSpec: [...playerLoot.bises, player.item],
+              offSpec: [...playerLoot.offSpec, player.item],
             };
           }
           break;

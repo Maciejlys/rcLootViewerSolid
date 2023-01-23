@@ -11,7 +11,7 @@ const SortableButton: Component<SortableButtonProps> = (props) => {
   return (
     <div class="flex items-center" onClick={() => props.sortItems(props.param)}>
       {props.label}
-      <a href="#">
+      <a>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="w-3 h-3 ml-1"
