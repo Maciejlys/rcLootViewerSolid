@@ -38,6 +38,31 @@ function createLoot() {
     })
   );
 
+  createEffect(
+    on(vote, (votes) => {
+      separateItems();
+      calculateScores();
+    })
+  );
+
+  createEffect(
+    on(itemWeight, (votes) => {
+      calculateScores();
+    })
+  );
+
+  createEffect(
+    on(contestedWeight, (votes) => {
+      calculateScores();
+    })
+  );
+
+  createEffect(
+    on(contestedItems, (votes) => {
+      calculateScores();
+    })
+  );
+
   const getPlayerLoot = (player: string) =>
     playersLoot().find((p) => p.player === player);
 

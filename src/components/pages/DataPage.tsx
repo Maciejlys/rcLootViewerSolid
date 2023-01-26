@@ -1,5 +1,6 @@
 import { Component, createSignal, Match, Switch } from "solid-js";
 import LootTable from "../molecules/LootTable";
+import Settings from "../organizms/Settings";
 
 const activeClass = "text-gray-900 dark:bg-gray-700 dark:text-white";
 const notActiveClass =
@@ -47,7 +48,9 @@ const DataPage: Component<{}> = (props) => {
           <Match when={currentTab() === Tabs.Data}>
             <LootTable />
           </Match>
-          <Match when={currentTab() === Tabs.Settings}>b</Match>
+          <Match when={currentTab() === Tabs.Settings}>
+            <Settings />
+          </Match>
         </Switch>
       </main>
     </div>

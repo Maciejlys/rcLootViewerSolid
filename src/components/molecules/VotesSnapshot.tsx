@@ -1,4 +1,5 @@
 import { Component, For } from "solid-js";
+import Title from "../atmos/Title";
 import Loot from "~/context/Loot";
 
 const VotesSnapshot: Component<{}> = (props) => {
@@ -6,6 +7,9 @@ const VotesSnapshot: Component<{}> = (props) => {
 
   return (
     <div class="relative overflow-x-auto">
+      <Title>
+        Different votes that were found, to help determine vote numbers
+      </Title>
       <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>

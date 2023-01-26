@@ -7,9 +7,11 @@ import VotesSnapshot from "../molecules/VotesSnapshot";
 
 const Votes: Component<{}> = (props) => {
   return (
-    <div class="flex items-center gap-10">
-      <VoteForm />
-      <div class="flex flex-col w-full flex-auto">
+    <div class="flex items-start justify-center gap-10">
+      <div class="flex w-1/2 flex-auto justify-center">
+        <VoteForm />
+      </div>
+      <div class="flex w-1/2 flex-auto justify-center">
         <VotesSnapshot />
       </div>
     </div>

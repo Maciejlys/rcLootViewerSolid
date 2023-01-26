@@ -13,10 +13,17 @@ function createLootScores() {
   ]);
 
   const addContestedItem = (item: string) => {
-    contestedItems().push(item);
+    setcontestedItems([...contestedItems(), item]);
   };
 
-  return { contestedWeight, itemWeight, contestedItems, addContestedItem };
+  return {
+    contestedWeight,
+    itemWeight,
+    contestedItems,
+    addContestedItem,
+    setitemWeight,
+    setcontestedWeight,
+  };
 }
 
 export default createRoot(createLootScores);

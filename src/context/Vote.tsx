@@ -7,9 +7,8 @@ function createVote() {
     Up: "3",
     OffSpec: "4",
   });
-  const [votesChanged, setvotesChanged] = createSignal(false);
 
-  return { vote, setVotes, votesChanged, setvotesChanged };
+  return { vote, setVotes };
 }
 
 export default createRoot(createVote);
